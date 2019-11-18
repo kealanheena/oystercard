@@ -21,5 +21,13 @@ describe Oystercard do
         expect(subject.balance).to eq 5
       end
     end
+
+    context "when starting with a balance at full limit" do
+      it "should raise an error when topping up more money" do
+        card = Oystercard.new(Oystercard::BALANCE_LIMIT)
+        message = "Limit of £#{Oystercard::BALANCE_LIMIT} has been exceeded"
+        expect { card.top_up(5) }.to raise_error message
+      end
+    end
   end
 end

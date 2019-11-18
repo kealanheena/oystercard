@@ -30,4 +30,14 @@ describe Oystercard do
       end
     end
   end
+
+  describe "#deduct(money)" do
+    context "when starting with a balance at £20" do
+      it "returns a balance of £15 when £5 is deducted" do
+        card = Oystercard.new(20)
+        expect(card.deduct(5)).to eq 15
+      end
+    end
+  end
+
 end

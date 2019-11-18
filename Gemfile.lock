@@ -20,7 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec (= 3.9.0)
+  rspec
 
 RUBY VERSION
    ruby 2.6.3p62

@@ -1,6 +1,10 @@
 require "oystercard"
 
 describe Oystercard do
+
+  let(:station) { double :station }
+  let(:station_2) { double :station }
+
   describe "#initilize" do
 
     it "has a balance of '0' by default" do
@@ -31,17 +35,7 @@ describe Oystercard do
     end
   end
 
-  # describe "#deduct(money)" do
-  #   context "when starting with a balance at £20" do
-  #     it "returns a balance of £15 when £5 is deducted" do
-  #       card = Oystercard.new(20)
-  #       expect(card.deduct(5)).to eq 15
-  #     end
-  #   end
-  # end
-
   describe "#in_journey?" do
-    let(:station) { double :station }
 
     it "returns false when starting with a new oystercard" do
       expect(subject.in_journey?).to be_falsy
@@ -56,13 +50,12 @@ describe Oystercard do
     it "returns false after touching out if already touched in" do
       subject.top_up(Oystercard::MIN_PRICE)
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station_2)
       expect(subject.in_journey?).to be_falsy
     end
   end
 
   describe "#touch_in" do
-    let(:station) { double :station }
 
     it "raises an error if the balance is less than #{Oystercard::MIN_PRICE}" do
       message = "Cannot touch in because your balance is less than #{Oystercard::MIN_PRICE}"
@@ -77,19 +70,28 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
-    let(:station) { double :station }
 
     it "should deduct #{Oystercard::MIN_PRICE} from the oystercards balance" do
     subject.top_up(Oystercard::MIN_PRICE)
     subject.touch_in(station)
-    expect { subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_PRICE)
+    expect { subject.touch_out(station_2) }.to change{ subject.balance }.by(-Oystercard::MIN_PRICE)
     end
 
     it "allows the card to forget the entry station" do
       subject.top_up(Oystercard::MIN_PRICE)
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station_2)
       expect(subject.entry_station).to eq nil
+    end
+  end
+
+  describe "#journey_list" do
+
+    it "returns a list of all the oystercards journeys" do
+      subject.top_up(Oystercard::MIN_PRICE)
+      subject.touch_in(station)
+      subject.touch_out(station_2)
+      expect(subject.journey_list).to eq [{:in => station, :out => station_2}] 
     end
   end
 

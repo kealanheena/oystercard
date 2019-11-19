@@ -42,18 +42,27 @@ describe Oystercard do
 
   describe "#in_journey?" do
     it "returns false when starting with a new oystercard" do
-      expect(subject.in_journey?).to false
+      expect(subject.in_journey?).to eq false
     end
 
     it "returns true after touching in" do
+      subject.top_up(Oystercard::MIN_PRICE)
       subject.touch_in
       expect(subject.in_journey?).to eq true
     end
 
     it "returns false after touching out if already touched in" do
+      subject.top_up(Oystercard::MIN_PRICE)
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey?).to eq false
+    end
+  end
+
+  describe "#touch_in" do
+    it "raises an error if the balance is less than #{Oystercard::MIN_PRICE}" do
+      message = "Cannot touch in because your balance is less than #{Oystercard::MIN_PRICE}"
+      expect { subject.touch_in }.to raise_error(message)
     end
   end
 

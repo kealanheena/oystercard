@@ -40,4 +40,21 @@ describe Oystercard do
     end
   end
 
+  describe "#in_journey?" do
+    it "returns false when starting with a new oystercard" do
+      expect(subject.in_journey?).to false
+    end
+
+    it "returns true after touching in" do
+      subject.touch_in
+      expect(subject.in_journey?).to eq true
+    end
+
+    it "returns false after touching out if already touched in" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey?).to eq false
+    end
+  end
+
 end

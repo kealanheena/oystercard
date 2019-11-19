@@ -26,7 +26,7 @@ class Oystercard
   end
 
   def touch_out(station)
-    @journey_list << {:in => @entry_station, :out => station}
+    @journey_list << {:in => [@entry_station.name, @entry_station.zone], :out => [station.name, station.zone]}
     deduct(MIN_PRICE)
     @entry_station = nil
   end

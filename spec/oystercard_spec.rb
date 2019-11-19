@@ -2,8 +2,8 @@ require "oystercard"
 
 describe Oystercard do
 
-  let(:station) { double :station }
-  let(:station_2) { double :station }
+  let(:station) { double(:station, name: "Liverpool Street", zone: 1) }
+  let(:station_2) { double(:station, name: "Old Street", zone: 2) }
 
   describe "#initilize" do
 
@@ -91,7 +91,7 @@ describe Oystercard do
       subject.top_up(Oystercard::MIN_PRICE)
       subject.touch_in(station)
       subject.touch_out(station_2)
-      expect(subject.journey_list).to eq [{:in => station, :out => station_2}] 
+      expect(subject.journey_list).to eq [{:in => ["Liverpool Street", 1], :out => ["Old Street", 2]}] 
     end
   end
 

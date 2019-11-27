@@ -93,7 +93,14 @@ You can run tests by running "rspec" in oystercard file.
 
 - expect to be create with 0 pounds as a default
 - expect oystercard to take an argument which will be the balance
--  
+- expect top up method to take an argument an top the card up by the number passed as an argument
+- expect oyster card to have a top up limit and throw an error if you try to top up over that limit
+- expect in journey method to equal true after touching in and false after touching out, default should be false
+- expect to raise a error if you don't have the minimum balance on your oyster card when you touch in
+- expect to remember the station after touching in
+- expect to deduct fare on touch out
+- expect to change the entry station back to nil after storing it as a journey
+- expect to save your journey to a journey list array
 
 ## Versioning
 

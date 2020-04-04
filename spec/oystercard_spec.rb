@@ -8,6 +8,13 @@ describe OysterCard do
   let(:min_fare) { OysterCard::MINIMUM_FARE }
   let(:station) { double :station }
   let(:station2) { double :station }
+  let(:journey) { double :journey }
+
+  before(:each) do
+    allow(journey).to receive(:paid?) { true }
+    allow(journey).to receive(:trip) { { entry: station, exit: station2 } }
+    allow(journey).to receive(:end).with(station2) { station2 }
+  end
 
   describe '#initialize' do
     it 'should initialize the class with a balance of zero' do
@@ -48,21 +55,22 @@ describe OysterCard do
     
     it 'should charge a penalty of £6 if you touch in without touching out' do
       card.top_up(50)
-      card.touch_in(station)
-      card.touch_in(station2)
+      card.touch_in(station, journey)
+      allow(journey).to receive(:paid?) { false }
+      card.touch_in(station2, journey)
       expect(card.balance).to eq(44)
     end
 
     it 'should raise an error if user tries to travel under minimum balance' do
       message = "Insuffient funds, please top up by #{min_balance}"
-      expect { card.touch_in(station) }.to raise_error JourneyError, message
+      expect { card.touch_in(station, journey) }.to raise_error JourneyError, message
     end
   end
 
   describe '#touch_out' do
     before do
       card.top_up(50)
-      card.touch_in(station)
+      card.touch_in(station, journey)
     end
 
     it 'should deduct a correct amount from my card when journey is complete' do

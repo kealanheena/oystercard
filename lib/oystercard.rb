@@ -1,5 +1,5 @@
 require_relative 'station'
-require_relative 'journey'
+# require_relative 'journey'
 require_relative 'errors'
 
 class OysterCard
@@ -26,11 +26,11 @@ class OysterCard
     @balance -= fare
   end
 
-  def touch_in(entry_station)
+  def touch_in(entry_station, journey = Journey.new(entry_station))
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
     penalty unless first_journey? || @current_journey.paid?
-    @current_journey = Journey.new(entry_station)
+    @current_journey = journey
   end
 
   def touch_out(exit_station)

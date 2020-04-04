@@ -14,9 +14,9 @@ describe OysterCard do
       expect(card.balance).to eq(0)
     end
 
-    # it 'should initialize with an entry station of nil' do
-    #   expect(card.entry_station).to eq(nil)
-    # end
+    it 'should initialize with a current journey of nil' do
+      expect(card.current_journey).to eq(nil)
+    end
 
     it 'should initialze with an empty journey array' do
       expect(card.journey_list).to eq []
@@ -45,16 +45,12 @@ describe OysterCard do
   end
 
   describe '#touch_in' do
-    it 'should accept an argument of the entry station, and store it' do
+    
+    it 'should charge a penalty of £6 if you touch in without touching out' do
       card.top_up(50)
       card.touch_in(station)
-      expect(card.entry_station).to eq station
-    end
-
-    it 'should be in_journey after touching in' do
-      card.top_up(50)
-      card.touch_in(station)
-      expect(card.in_journey?).to be_truthy
+      card.touch_in(station2)
+      expect(card.balance).to eq(44)
     end
 
     it 'should raise an error if user tries to travel under minimum balance' do
@@ -67,22 +63,16 @@ describe OysterCard do
     before do
       card.top_up(50)
       card.touch_in(station)
-      card.touch_out(station2)
-    end
-    it 'should change in_journey status to false' do
-      expect(card.in_journey?).to be_falsey
     end
 
     it 'should deduct a correct amount from my card when journey is complete' do
+      card.touch_out(station2)
       expect { card.deduct }.to change { card.balance }.by(-min_fare)
     end
 
     it 'should accept an argument of the exit station, and store it' do
-      expect(card.journey_list[0][:exit]).to eq(station2)
+      expect(card.touch_out(station2)).to eq([{ entry: station, exit: station2 }])
     end
 
-    it "should store the entry and exit stations as a journey after touching out" do 
-      expect(card.journey_list).to eq([{ entry: station, exit: station2 }])
-    end
   end
 end

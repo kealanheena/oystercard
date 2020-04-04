@@ -9,7 +9,7 @@ describe Journey do
 
     it 'should take an argument of entry station and add the station to the trip hash' do
       journey = Journey.new(station1)
-      expect(journey.trip).to eq({ entry: station1, exit: false })
+      expect(journey.trip).to eq({ entry: station1, exit: nil })
     end
   end
 
@@ -31,7 +31,7 @@ describe Journey do
     
     it 'should return false if the journey hasn\'t ended' do
       journey = Journey.new(station1)
-      expect(journey.paid?).to eq false
+      expect(journey.paid?).to be_falsey
     end
 
     it 'should return true if the journey has ended' do

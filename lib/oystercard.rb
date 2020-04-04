@@ -1,12 +1,14 @@
 require_relative 'station'
 require_relative 'journey'
+require_relative 'errors'
 
 class OysterCard
   LIMIT = 100
   MINIMUM_BALANCE = 1
   MINIMUM_FARE = 5
+  PENALTY_FARE = 6
 
-  attr_reader :balance, :journey_list, :exit_station, :entry_station
+  attr_reader :balance, :journey_list, :current_journey
 
   def initialize(balance = 0)
     @balance = balance
@@ -27,22 +29,28 @@ class OysterCard
   def touch_in(entry_station)
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
-    # deduct(6) unless current_journey.ex
+    penalty unless first_journey? || @current_journey.paid?
     @current_journey = Journey.new(entry_station)
   end
 
   def touch_out(exit_station)
     @current_journey.end(exit_station)
+    log_journey
   end
-
-  # def in_journey?
-  #   !@entry_station.nil?
-  # end
 
   private
 
+  def penalty
+    deduct(PENALTY_FARE)
+    log_journey
+  end
+
   def log_journey
-    @journey_list << current_journey
+    @journey_list << @current_journey.trip
+  end
+
+  def first_journey?
+    @current_journey == nil
   end
 
   def top_up_amount_error(amount)
@@ -54,10 +62,4 @@ class OysterCard
     message = "Insuffient funds, please top up by #{MINIMUM_BALANCE}"
     JourneyError.new(message)
   end
-end
-
-class BalanceError < StandardError
-end
-
-class JourneyError < StandardError
 end

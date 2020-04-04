@@ -5,7 +5,7 @@ class Journey
   def initialize(entry_station)
     @trip = {
       entry: entry_station,
-      exit: false
+      exit: nil
     }
   end
 

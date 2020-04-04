@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey'
 
 class OysterCard
   LIMIT = 100
@@ -9,7 +10,7 @@ class OysterCard
 
   def initialize(balance = 0)
     @balance = balance
-    @entry_station = nil
+    @current_journey
     @journey_list = []
   end
 
@@ -26,19 +27,23 @@ class OysterCard
   def touch_in(entry_station)
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
-    @entry_station = entry_station
+    # deduct(6) unless current_journey.ex
+    @current_journey = Journey.new(entry_station)
   end
 
   def touch_out(exit_station)
-    @journey_list << { entry: @entry_station, exit: exit_station }
-    @entry_station = nil
+    @current_journey.end(exit_station)
   end
 
-  def in_journey?
-    !@entry_station.nil?
-  end
+  # def in_journey?
+  #   !@entry_station.nil?
+  # end
 
   private
+
+  def log_journey
+    @journey_list << current_journey
+  end
 
   def top_up_amount_error(amount)
     message = "Can't exceed #{LIMIT} with #{amount}"

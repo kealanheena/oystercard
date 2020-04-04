@@ -13,4 +13,8 @@ class Journey
     @trip[:exit] = exit_station
   end
 
+  def paid?
+    @trip[:exit]
+  end
+
 end

@@ -12,7 +12,6 @@ describe OysterCard do
 
   before(:each) do
     allow(journey).to receive(:paid?) { true }
-    allow(journey).to receive(:trip) { { entry: station, exit: station2 } }
     allow(journey).to receive(:end).with(station2) { station2 }
   end
 
@@ -21,13 +20,9 @@ describe OysterCard do
       expect(card.balance).to eq(0)
     end
 
-    it 'should initialize with a current journey of nil' do
-      expect(card.current_journey).to eq(nil)
-    end
-
-    it 'should initialze with an empty journey array' do
-      expect(card.journey_list).to eq []
-    end
+    # it 'should initialze with an empty journey array' do
+    #   expect(card.journey_list).to eq []
+    # end
   end
 
   describe '#top_up' do
@@ -79,7 +74,7 @@ describe OysterCard do
     end
 
     it 'should accept an argument of the exit station, and store it' do
-      expect(card.touch_out(station2)).to eq([{ entry: station, exit: station2 }])
+      expect(card.touch_out(station2)).to eq([journey])
     end
 
   end

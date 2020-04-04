@@ -1,5 +1,4 @@
 require_relative 'station'
-# require_relative 'journey'
 require_relative 'errors'
 
 class OysterCard
@@ -8,11 +7,10 @@ class OysterCard
   MINIMUM_FARE = 5
   PENALTY_FARE = 6
 
-  attr_reader :balance, :journey_list, :current_journey
+  attr_reader :balance, :journey_list
 
   def initialize(balance = 0)
     @balance = balance
-    @current_journey
     @journey_list = []
   end
 
@@ -46,11 +44,11 @@ class OysterCard
   end
 
   def log_journey
-    @journey_list << @current_journey.trip
+    @journey_list << @current_journey
   end
 
   def first_journey?
-    @current_journey == nil
+    @current_journey.nil?
   end
 
   def top_up_amount_error(amount)

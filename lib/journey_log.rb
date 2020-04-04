@@ -13,6 +13,11 @@ class JourneyLog
   end
 
   def start(station, journey = Journey.new(station))
-    journey
+    @current_journey = journey
+  end
+
+  def end(station)
+    @current_journey.end(station)
+    @list << @current_journey
   end
 end

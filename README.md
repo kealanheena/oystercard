@@ -80,3 +80,63 @@ I need to have the correct fare calculated
 ```
 
 <a name="Methods">Objects & Methods</a>
+
+## Code style
+
+- OOD
+- TDD
+
+## Tech Used
+
+- RSpec
+- Ruby
+
+## Features
+
+You'll be able to:
+
+- Create and oyster card and add money to it on creation
+- Top up your oyster card
+- Tap in and out of stations
+- See all your previous journeys
+- Be denied access if you have insufficient funds
+- Be charged a penalty for not tapping in or out of a station
+- Have your fare deducted from your oyster card balance
+
+## Getting Started
+
+This programme is used in the terminal.
+
+#### To Start
+
+- Run "ruby  oystercard.rb" file in terminal.
+
+## Running the tests
+
+You can run tests by running "rspec" in oystercard file.
+
+### Tests 
+
+### Oyster Card class
+```
+expect to be create with 0 pounds as a default
+expect oystercard to take an argument which will be the balance
+expect top up method to take an argument an top the card up by the number passed as an argument
+expect oyster card to have a top up limit and throw an error if you try to top up over that limit
+expect in journey method to equal true after touching in and false after touching out, default should be false
+expect to raise a error if you don't have the minimum balance on your oyster card when you touch in
+expect to remember the station after touching in
+expect to deduct fare on touch out
+expect to change the entry station back to nil after storing it as a journey
+expect to save your journey to a journey list array
+```
+
+### Station class
+```
+expect the station to have a name
+expect the station to have a zone
+```
+
+## Versioning
+
+"oystercard" is using ruby version 2.6.3, to change ruby versions run "rvm install ruby-2.6.3" in terminal.

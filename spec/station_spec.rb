@@ -2,18 +2,16 @@ require "station"
 
 describe Station do
 
-  describe "#name" do
-    it "return the station's name" do
-      station = Station.new("Liverpool Street", 1)
-      expect(station.name).to eq "Liverpool Street"
-    end
-  end
+  describe '#initialize' do 
 
-  describe "#zone" do
-    it "return the station's zone" do
-      station = Station.new("Liverpool Street", 1)
+    it "should create a class instance of the station name" do 
+      station = Station.new("London Liverpool Street", 1)
+      expect(station.name).to eq "London Liverpool Street"
+    end
+
+    it "should create a class instance of the station zone" do
+      station = Station.new("London Liverpool Street", 1)
       expect(station.zone).to eq 1
     end
   end
-
 end

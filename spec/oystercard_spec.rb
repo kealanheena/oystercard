@@ -1,98 +1,88 @@
-require "oystercard"
+require 'oystercard'
 
-describe Oystercard do
+describe OysterCard do
 
-  let(:station) { double(:station, name: "Liverpool Street", zone: 1) }
-  let(:station_2) { double(:station, name: "Old Street", zone: 2) }
+  let(:card) { OysterCard.new }
+  let(:limit) { OysterCard::LIMIT }
+  let(:min_balance) { OysterCard::MINIMUM_BALANCE }
+  let(:min_fare) { OysterCard::MINIMUM_FARE }
+  let(:station) { double :station }
+  let(:station2) { double :station }
 
-  describe "#initilize" do
-
-    it "has a balance of '0' by default" do
-      expect(subject.balance).to eq 0
+  describe '#initialize' do
+    it 'should initialize the class with a balance of zero' do
+      expect(card.balance).to eq(0)
     end
 
-    it "returns balance given when user specifies balance" do
-      user_input = rand(5)
-      card = Oystercard.new(user_input)
-      expect(card.balance).to eq user_input
-    end
-  end
+    # it 'should initialize with an entry station of nil' do
+    #   expect(card.entry_station).to eq(nil)
+    # end
 
-  describe "#top_up(money)" do
-    context "when starting with default balance of 0" do
-      it "increases the balance to 5 when top_up(5) is called" do
-        subject.top_up(5)
-        expect(subject.balance).to eq 5
-      end
-    end
-
-    context "when starting with a balance at full limit" do
-      it "should raise an error when topping up more money" do
-        card = Oystercard.new(Oystercard::BALANCE_LIMIT)
-        message = "Limit of £#{Oystercard::BALANCE_LIMIT} has been exceeded"
-        expect { card.top_up(5) }.to raise_error message
-      end
+    it 'should initialze with an empty journey array' do
+      expect(card.journey_list).to eq []
     end
   end
 
-  describe "#in_journey?" do
-
-    it "returns false when starting with a new oystercard" do
-      expect(subject.in_journey?).to be_falsy
+  describe '#top_up' do
+    it 'should add given amount to balance' do
+      card.top_up(10)
+      expect(card.balance).to eq(10)
     end
 
-    it "returns true after touching in" do
-      subject.top_up(Oystercard::MIN_PRICE)
-      subject.touch_in(station)
-      expect(subject.in_journey?).to be_truthy
-    end
-
-    it "returns false after touching out if already touched in" do
-      subject.top_up(Oystercard::MIN_PRICE)
-      subject.touch_in(station)
-      subject.touch_out(station_2)
-      expect(subject.in_journey?).to be_falsy
+    it 'should not push balance above limit' do
+      limit.times { card.top_up 1 }
+      amount = 1
+      message = "Can't exceed #{limit} with #{amount}"
+      expect { card.top_up amount }.to raise_error BalanceError, message
     end
   end
 
-  describe "#touch_in" do
-
-    it "raises an error if the balance is less than #{Oystercard::MIN_PRICE}" do
-      message = "Cannot touch in because your balance is less than #{Oystercard::MIN_PRICE}"
-      expect { subject.touch_in(station) }.to raise_error(message)
-    end
-
-    it "takes an argument and allows the card to remember the argument as the touched in station" do
-      subject.top_up(Oystercard::MIN_PRICE)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+  describe '#deduct' do
+    it 'should deduct a specified fare,then return the remaining balance' do
+      card.top_up(30)
+      expect(card.deduct(10)).to eq(20)
     end
   end
 
-  describe "#touch_out" do
-
-    it "should deduct #{Oystercard::MIN_PRICE} from the oystercards balance" do
-    subject.top_up(Oystercard::MIN_PRICE)
-    subject.touch_in(station)
-    expect { subject.touch_out(station_2) }.to change{ subject.balance }.by(-Oystercard::MIN_PRICE)
+  describe '#touch_in' do
+    it 'should accept an argument of the entry station, and store it' do
+      card.top_up(50)
+      card.touch_in(station)
+      expect(card.entry_station).to eq station
     end
 
-    it "allows the card to forget the entry station" do
-      subject.top_up(Oystercard::MIN_PRICE)
-      subject.touch_in(station)
-      subject.touch_out(station_2)
-      expect(subject.entry_station).to eq nil
+    it 'should be in_journey after touching in' do
+      card.top_up(50)
+      card.touch_in(station)
+      expect(card.in_journey?).to be_truthy
     end
-  end
 
-  describe "#journey_list" do
-
-    it "returns a list of all the oystercards journeys" do
-      subject.top_up(Oystercard::MIN_PRICE)
-      subject.touch_in(station)
-      subject.touch_out(station_2)
-      expect(subject.journey_list).to eq [{:in => ["Liverpool Street", 1], :out => ["Old Street", 2]}] 
+    it 'should raise an error if user tries to travel under minimum balance' do
+      message = "Insuffient funds, please top up by #{min_balance}"
+      expect { card.touch_in(station) }.to raise_error JourneyError, message
     end
   end
 
+  describe '#touch_out' do
+    before do
+      card.top_up(50)
+      card.touch_in(station)
+      card.touch_out(station2)
+    end
+    it 'should change in_journey status to false' do
+      expect(card.in_journey?).to be_falsey
+    end
+
+    it 'should deduct a correct amount from my card when journey is complete' do
+      expect { card.deduct }.to change { card.balance }.by(-min_fare)
+    end
+
+    it 'should accept an argument of the exit station, and store it' do
+      expect(card.journey_list[0][:exit]).to eq(station2)
+    end
+
+    it "should store the entry and exit stations as a journey after touching out" do 
+      expect(card.journey_list).to eq([{ entry: station, exit: station2 }])
+    end
+  end
 end

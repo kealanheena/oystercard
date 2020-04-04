@@ -39,5 +39,9 @@ describe JourneyLog do
       subject.start(station, journey)
       expect(subject.end(station2)).to eq [journey]
     end
+
+    it 'should store the journey even if there was no start station' do
+      expect(subject.end(station2, journey)).to eq [journey]
+    end
   end
 end

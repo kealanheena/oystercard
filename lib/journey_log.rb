@@ -8,16 +8,26 @@ class JourneyLog
     @list = []
   end
 
-  def log(journey)
-    @list << journey
-  end
-
   def start(station, journey = Journey.new(station))
     @current_journey = journey
   end
 
-  def end(station)
+  def end(station, journey = Journey.new(false))
+    @current_journey = journey if penalty?
     @current_journey.end(station)
-    @list << @current_journey
+    log(@current_journey)
   end
+
+  def log(journey)
+    @list << journey
+    @current_journey = nil
+    @list
+  end
+
+  private
+
+  def penalty?
+    @current_journey.nil?
+  end
+
 end

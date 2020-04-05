@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey_log'
 require_relative 'errors'
 
 class OysterCard
@@ -7,11 +8,11 @@ class OysterCard
   MINIMUM_FARE = 5
   PENALTY_FARE = 6
 
-  attr_reader :balance, :journey_list
+  attr_reader :balance, :journey_log
 
-  def initialize(balance = 0)
+  def initialize(balance = 0, journey_log = JourneyLog.new)
     @balance = balance
-    @journey_list = []
+    @journey_log = journey_log
   end
 
   def top_up(amount)
@@ -27,24 +28,18 @@ class OysterCard
   def touch_in(entry_station, journey = Journey.new(entry_station))
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
-    penalty unless first_journey? || @current_journey.paid?
-    @current_journey = journey
+    # penalty unless first_journey? || @journey_log.current_journey.last.paid?
+    @journey_log.start(entry_station)
   end
 
   def touch_out(exit_station)
-    @current_journey.end(exit_station)
-    log_journey
+    @journey_log.end(exit_station)
   end
 
   private
 
   def penalty
     deduct(PENALTY_FARE)
-    log_journey
-  end
-
-  def log_journey
-    @journey_list << @current_journey
   end
 
   def first_journey?

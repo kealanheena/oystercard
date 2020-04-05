@@ -2,18 +2,19 @@ require_relative 'journey'
 
 class JourneyLog
 
-  attr_reader :list
+  attr_reader :list, :current_journey
 
   def initialize
     @list = []
   end
 
   def start(station, journey = Journey.new(station))
+    # @penalty = true if no_end?
     @current_journey = journey
   end
 
   def end(station, journey = Journey.new(false))
-    @current_journey = journey if penalty?
+    @current_journey = journey if no_start?
     @current_journey.end(station)
     log(@current_journey)
   end
@@ -26,8 +27,12 @@ class JourneyLog
 
   private
 
-  def penalty?
+  def no_start?
     @current_journey.nil?
+  end
+
+  def no_end?
+    @current_journey[:exit]
   end
 
 end

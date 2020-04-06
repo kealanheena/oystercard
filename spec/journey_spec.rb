@@ -27,17 +27,17 @@ describe Journey do
     end
   end
 
-  # describe '#touched_out?' do
+  describe '#paid?' do
     
-  #   it 'should return false if the journey hasn\'t ended' do
-  #     journey = Journey.new(station1)
-  #     expect(journey.touched_out?).to be_falsey
-  #   end
+    it 'should return false if the journey hasn\'t ended' do
+      journey = Journey.new(station1)
+      expect(journey.paid?).to be_falsey
+    end
 
-  #   it 'should return true if the journey has ended' do
-  #     journey = Journey.new(station1)
-  #     journey.end(station2)
-  #     expect(journey.touched_out?).to be_truthy
-  #   end
-  # end
+    it 'should return true if the journey has ended' do
+      journey = Journey.new(station1)
+      journey.end(station2)
+      expect(journey.paid?).to be_truthy
+    end
+  end
 end

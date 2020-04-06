@@ -9,7 +9,6 @@ class JourneyLog
   end
 
   def start(station, journey = Journey.new(station))
-    # @penalty = true if no_end?
     @current_journey = journey
   end
 
@@ -21,18 +20,12 @@ class JourneyLog
 
   def log(journey)
     @list << journey
-    @current_journey = nil
-    @list
   end
 
   private
 
   def no_start?
     @current_journey.nil?
-  end
-
-  def no_end?
-    @current_journey[:exit]
   end
 
 end

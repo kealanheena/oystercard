@@ -44,13 +44,13 @@ describe OysterCard do
 
   describe '#touch_in' do
     
-    # it 'should charge a penalty of £6 if you touch in without touching out' do
-    #   card.top_up(50)
-    #   card.touch_in(station, journey)
-    #   allow(journey).to receive(:paid?) { false }
-    #   card.touch_in(station2, journey)
-    #   expect(card.balance).to eq(44)
-    # end
+    it 'should charge a penalty of £6 if you touch in without touching out' do
+      card.top_up(50)
+      card.touch_in(station, journey)
+      allow(journey).to receive(:paid?) { false }
+      card.touch_in(station2, journey)
+      expect(card.balance).to eq(44)
+    end
 
     it 'should raise an error if user tries to travel under minimum balance' do
       message = "Insuffient funds, please top up by #{min_balance}"

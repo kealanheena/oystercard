@@ -28,7 +28,7 @@ class OysterCard
   def touch_in(entry_station, journey = Journey.new(entry_station))
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
-    # penalty unless first_journey? || @journey_log.current_journey.last.paid?
+    penalty unless first_journey? || @journey_log.current_journey.paid?
     @journey_log.start(entry_station)
   end
 
@@ -43,7 +43,7 @@ class OysterCard
   end
 
   def first_journey?
-    @current_journey.nil?
+    @journey_log.current_journey.nil?
   end
 
   def top_up_amount_error(amount)

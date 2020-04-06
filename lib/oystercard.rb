@@ -25,7 +25,7 @@ class OysterCard
     @balance -= fare
   end
 
-  def touch_in(entry_station, journey = Journey.new(entry_station))
+  def touch_in(entry_station)
     raise minimum_balance_error if @balance < MINIMUM_BALANCE
 
     penalty unless first_journey? || @journey_log.current_journey.paid?

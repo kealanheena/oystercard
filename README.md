@@ -2,32 +2,9 @@
 
 # Oystercard Challenge
 
-
-[User Story](#Story) | [Objects & Methods](#Methods)
-
-## <a name="Outline">Outline</a>
-
-
-
-## <a name="Task">The Task</a>
-
 This week's challenge will start with going back over the basics I covered last week in Boris Bikes, giving me the chance to reinforce what I learned last week. I'll then be challenged to build a more complex system which should really stretch my skills in Ruby, TDD and object-oriented design.
 
-
-## <a name="Goals">Goals</a>
-
-### I write code that is easy to change
-
-Writing easy to change software is highly prized amongst developers and employers. By developers because most of a developer's time is spent changing software. By employers because their teams can deliver value to customers faster.
-
-### I can test-drive my code
-
-Tested software is easier to change because you can tell when it's broken just by running a command, even the tricky edge cases.
-
-### I can build with objects
-Most code in the world is structured in small pieces called objects. This is done because it is easier to change than having everything in one place.
-
-<a name="Story">User Story</a>
+## User Stories
 
 ```
 In order to use public transport
@@ -79,8 +56,6 @@ As a customer
 I need to have the correct fare calculated
 ```
 
-<a name="Methods">Objects & Methods</a>
-
 ## Code style
 
 - OOD
@@ -118,24 +93,27 @@ You can run tests by running "rspec" in oystercard file.
 ### Tests 
 
 ### Oyster Card class
-```
-expect to be create with 0 pounds as a default
-expect oystercard to take an argument which will be the balance
-expect top up method to take an argument an top the card up by the number passed as an argument
-expect oyster card to have a top up limit and throw an error if you try to top up over that limit
-expect in journey method to equal true after touching in and false after touching out, default should be false
-expect to raise a error if you don't have the minimum balance on your oyster card when you touch in
-expect to remember the station after touching in
-expect to deduct fare on touch out
-expect to change the entry station back to nil after storing it as a journey
-expect to save your journey to a journey list array
-```
+
+- #initialize
+  - should initialize the class with a balance of zero
+- #top_up
+  - should add given amount to balance
+  - should not push balance above limit
+- #deduct
+  - should deduct a specified fare,then return the remaining balance
+- #touch_in
+  - should charge a penalty of £6 if you touch in without touching out
+  - should raise an error if user tries to travel under minimum balance
+- #touch_out
+  - should deduct a correct amount from my card when journey is complete
+  - should accept an argument of the exit station, and store it
+
 
 ### Station class
-```
-expect the station to have a name
-expect the station to have a zone
-```
+
+- #initialize
+  - should create a class instance of the station name
+  - should create a class instance of the station zone
 
 ## Versioning
 

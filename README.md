@@ -92,7 +92,7 @@ You can run tests by running "rspec" in oystercard file.
 
 ### Tests 
 
-### Oyster Card class
+### Oyster Card Class
 
 - #initialize
   - should initialize the class with a balance of zero
@@ -109,11 +109,35 @@ You can run tests by running "rspec" in oystercard file.
   - should accept an argument of the exit station, and store it
 
 
-### Station class
+### Station Class
 
 - #initialize
   - should create a class instance of the station name
   - should create a class instance of the station zone
+
+### Journey Class
+
+- #initialize
+  - should take an argument of entry station and add the station to the trip hash
+- #end
+  - should take an argument an add it to the trip instance variable
+  - should return the exit station
+- #paid?
+  - should return false if the journey hasn't ended
+  - should return true if the journey has ended
+
+### Journey Log Class
+
+- #initialize
+  - should initialze with an empty journey array
+- #log
+  - should add the journey to the list
+  - should be able to log multiple journeys
+- #start
+  - should start a journey and add the start location to the journey
+- #end
+  - should add the journey to the list
+  - should store the journey even if there was no start station
 
 ## Versioning
 

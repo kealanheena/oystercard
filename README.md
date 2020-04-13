@@ -84,7 +84,7 @@ This programme is used in the terminal.
 
 #### To Start
 
-- Run "ruby  oystercard.rb" file in terminal.
+- Run irb and require "./lib/oystercard.rb" and "./lib/station.rb" files in terminal.
 
 ## Running the tests
 
